@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<ul>
+    <li class="aa"></li>
+    <li class="aa"></li>
+    <li class="aa"></li>
+</ul>
+<div>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+<div></div>
+<div>
+    <ul>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+<div>
+    <div>
+        <ul>
+            <li></li>
+            <li class="a"></li>
+        </ul>
+    </div>
+</div>
+<div></div>
+</body>
+</html>
+
+<script>
+    var tag_cl = /^([^.]+|[^#]+)\.([^.]+|[^#]+)$/;
+    var tag_id = /^([^.]+|[^#]+)#([^.]+|[^#]+)$/;
+    var id = /^#/;
+    var cl = /^\./;
+    console.log(id.test("li.a"));
+    console.log(cl.test("li.a"));
+    console.log(tag_id.test("li.a"));
+    console.log(tag_cl.test("li.a"));
+//    console.log(tag_cl.test("ul.idd"));
+//    console.log(tag_cl.test("ulidd"));
+//    console.log(tag_cl.test(".ulidd"));
+//    console.log(tag_id.test("ul#idd"));
+//    console.log(tag_id.test("ulidd"));
+//    console.log(tag_id.test("#ulidd"));
+
+    function sel(a, b) {
+        var id = /^#/;
+        var cl = /^\./;
+        var tag_cl = /^([^.]+|[^#]+)\.([^.]+|[^#]+)$/;
+        var tag_id = /^([^.]+|[^#]+)#([^.]+|[^#]+)$/;
+        if (b) {
+            if(id.test(a[0])) {
+                var t = b.getElementById(a[0]);
+                a.shift();
+                return t;
+            }
+            else if(tag_id.test(a[0])) {
+                var c = a[0].substr(0,a[0].indexOf("#") + 1).toUpperCase();
+                a[0] = a[0].substr(a[0].indexOf("#"));
+                var t = b.getElementById(a[0]);
+                a.shift();
+                if(t.tagName != c) {
+                    console.log("Error elements selector don't exist");
+                    return;
+                }
+                return t;
+            }
+            else {
+                if (a.length > 1) {
+                    var t;
+                    if(cl.test(a[0])) {
+                        t = b.getElementsByClassName(a[0]);
+                    }
+                    else if(tag_cl.test(a[0])) {
+                        console.log(a[0]);
+                        var c = a[0].substr(0,a[0].indexOf(".")).toUpperCase();
+                        console.log(c);
+                        a[0] = a[0].substr(a[0].indexOf(".") + 1);
+                        console.log(a[0]);
+                        var t = b.getElementsByClassName(a[0]);
+                        for(var i=0;i< t.length;i++) {
+                            if(t[i].tagName != c) {
+                                t = t.slice(0,i).concat(t.slice(i + 1, t.length));
+                            }
+                        }
+                    }
+                    else {
+                        t = b.getElementsByTagName(a[0]);
+                    }
+                    a.shift();
+                    if (t.length != 1) {
+                        var n = [];
+                        for (var i = 0; i < t.length; i++) {
+                            console.log(t);
+                            var m = sel(a,n[i]);
+                            if(m.length != 1) {
+                                for(var i=0;i< m.length;i++) {
+                                    n.push(m[i]);
+                                }
+                            }
+                            else {
+                                n.push(m[0]);
+                            }
+                        }
+                        return n;
+                    } else {
+                        return sel(a, t[0]);
+                    }
+                }
+                else {
+                    var t;
+                    if(cl.test(a[0])) {
+                        t = b.getElementsByClassName(a[0]);
+                    } else if(tag_cl.test(a[0])) {
+                        console.log(a[0]);
+                        var c = a[0].substr(0,a[0].indexOf(".")).toUpperCase();
+                        console.log(c);
+                        a[0] = a[0].substr(a[0].indexOf(".") + 1);
+                        console.log(a[0]);
+                        var t = b.getElementsByClassName(a[0]);
+                        for(var i=0;i< t.length;i++) {
+                            if(t[i].tagName != c) {
+                                t = t.slice(0,i).concat(t.slice(i + 1, t.length));
+                            }
+                        }
+                    }
+                    else {
+                        t = b.getElementsByTagName(a[0]);
+                    }
+                    if (t.length != 1) {
+                        var n = [];
+                        for (var i = 0; i < t.length; i++) {
+                            n.push(t[i]);
+                        }
+                        return n;
+                    }
+                    else {
+                        return t[0];
+                    }
+                }
+            }
+        } else {
+            return sel(a, document);
+        }
+    }
+
+    console.log(sel(["div","ul","li"]));
+</script>
