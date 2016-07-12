@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div ul li {
+            display: block;
+            width: 200px;
+            height: 30px;
+            background-color: green;
+            color: pink;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+    <script src="TH-Framework.js"></script>
+</head>
+<body>
+<div class="aa">
+    <ul>
+        <li class="li1"></li>
+        <li class="li2"></li>
+        <li class="li3"></li>
+    </ul>
+</div>
+<div class="aa2"></div>
+<button>animate!</button>
+</body>
+</html>
+
+<script>
+    TH(function () {
+        //    var t = document.getElementsByTagName('div')[0];
+        //    if(/^(\[object HTML)([a-zA-Z]*)(Element\])$/.test(t.toString())) {
+        //        console.log("是一个DOM元素");
+        //    }
+
+        var c = new TH("div");
+        window.c = c;
+
+        console.log(c);
+
+        var a = TH("div ul li");
+        var b = TH("div");
+        window.a = a;
+        window.b = b;
+        console.log(a);
+        console.log(b);
+        b.on('mouseover', function () {
+            this.style.backgroundColor = 'red';
+        }).on('mouseout', function () {
+            this.style.backgroundColor = 'blue';
+        });
+
+        a.on('click', function () {
+            if (this.innerHTML == "red") {
+                this.innerHTML = "#fff";
+            }
+            else {
+                this.innerHTML = "red";
+            }
+        });
+
+        TH("button").on("click", function () {
+            a.animate({"width":"500px","height":"100px","opacity":"0.3"},2000,"linear",function(){console.log("complete1");})
+                    .animate({"width":"200px","height":"30px","opacity":"1"},2000,"linear",function(){console.log("complete2");})
+                    .animate({"width":"500px","height":"100px","opacity":"0.3"},2000,"linear",function(){console.log("complete3");});
+        });
+    });
+</script>
